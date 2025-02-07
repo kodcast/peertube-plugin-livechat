@@ -299,25 +299,27 @@ async function _readNoDuplicate (
   return result
 }
 
-function _readQuotes (botData: Record<string, unknown>): ChannelConfigurationOptions['bot']['quotes'] {
+function _readQuotes(botData: Record<string, unknown>): ChannelConfigurationOptions['bot']['quotes'] {
   if (!Array.isArray(botData.quotes)) {
-    throw new Error('Invalid quotes data')
+    throw new Error('Invalid quotes data');
   }
-  const result: ChannelConfigurationOptions['bot']['quotes'] = []
+  const result: ChannelConfigurationOptions['bot']['quotes'] = [];
   for (const qs of botData.quotes) {
     if (!_assertObjectType(qs)) {
-      throw new Error('Invalid entry in botData.quotes')
+      throw new Error('Invalid entry in botData.quotes');
     }
-    const messages = _readStringArray(qs, 'messages')
-    const delay = _readInteger(qs, 'delay', 1, 6000)
+    const messages = _readStringArray(qs, 'messages');
+    
+    const delayInMinutes = _readInteger(qs, 'delay', 1, 6000);
 
     result.push({
       messages,
-      delay
-    })
+      delay: delayInMinutes
+    });
   }
-  return result
+  return result;
 }
+
 
 function _readCommands (botData: Record<string, unknown>): ChannelConfigurationOptions['bot']['commands'] {
   if (!Array.isArray(botData.commands)) {
